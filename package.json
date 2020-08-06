@@ -10,6 +10,8 @@
     "@testing-library/user-event": "^7.2.1",
     "@typescript-eslint/eslint-plugin": "^2.10.0",
     "@typescript-eslint/parser": "^2.10.0",
+    "antd": "^4.5.2",
+    "axios": "^0.19.2",
     "babel-eslint": "10.1.0",
     "babel-jest": "^24.9.0",
     "babel-loader": "8.1.0",
@@ -48,9 +50,9 @@
     "react-app-polyfill": "^1.0.6",
     "react-dev-utils": "^10.2.1",
     "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
     "resolve": "1.15.0",
     "resolve-url-loader": "3.1.1",
-    "sass-loader": "8.0.2",
     "semver": "6.3.0",
     "style-loader": "0.23.1",
     "terser-webpack-plugin": "2.3.5",
@@ -135,5 +137,10 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "http-proxy-middleware": "^1.0.5",
+    "node-sass": "^4.14.1",
+    "sass-loader": "^8.0.2"
   }
 }

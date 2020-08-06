@@ -1,0 +1,97 @@
+.login {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+   //background-image: linear-gradient(to right, #2e77bb, #34cfbd);
+  background-image: url("/assets/bg.png");
+  background-color: #0088f4;
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  .container {
+    width: 60%;
+    height: 60%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    padding: 0 50px;
+    box-sizing: border-box;
+    position: relative;
+    box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.1);
+    .rowStyle {
+      width: 100%;
+    }
+    .img_logo {
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: 10px;
+      background: #128bf1;
+      width: 12%;
+      padding: 6px;
+      border-radius: 4px;
+    }
+    .img_ysj {
+      position: absolute;
+      width: 22%;
+      right: 1px;
+      top: 1px;
+      z-index: 0;
+    }
+    .l_left {
+      img {
+        width: 90%;
+      }
+    }
+  }
+  .l_block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    .form-type {
+      width: 100%;
+      .form-title {
+        margin-bottom: 24px;
+        .title {
+          color: #128bf1;
+          cursor: pointer;
+        }
+      }
+
+      .login-form {
+        .getCode {
+          font-size: 14px;
+        }
+        .login-form-button {
+          background: #128bf1;
+          border-color: #128bf1;
+          border-radius: 4px;
+          &:active {
+            background: #1270f1;
+            border-color: #1270f1;
+          }
+        }
+      }
+    }
+
+  }
+}
+
+@media (max-width: 1600px) {
+  .container {
+    width: 80% !important;
+  }
+}
+@media (min-width: 1600px) and (max-width: 1800px){
+  .container {
+    width: 80% !important;
+  }
+}
