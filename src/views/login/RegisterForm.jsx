@@ -1,12 +1,23 @@
 import React, {Component} from 'react';
 import {Button, Col, Form, Input, Row} from "antd";
-import {UserOutlined, LockOutlined, MobileOutlined} from '@ant-design/icons';
+import {UserOutlined, LockOutlined, MobileOutlined, EyeTwoTone, EyeInvisibleOutlined} from '@ant-design/icons';
+import Code from '../../components/code/index'
 
 export default class RegisterForm extends Component {
     constructor(props) {
         super(props);
-        this.state = {}
+        // 创建一个 ref 来存储 textInput 的 DOM 元素
+        this.textInput = React.createRef();
+        this.state = {
+            userName:''
+        }
     }
+
+    formInputChange = (changedValues, allValues) => {
+        this.setState({
+            userName:changedValues.username
+        })
+    };
 
     onFinish = values => {
         console.log('Received values of form: ', values);
@@ -31,38 +42,49 @@ export default class RegisterForm extends Component {
                         </Row>
                     </Col>
                 </Row>
-                <Form name="normal_login" size="large" className="login-form" initialValues={{remember: true}} onFinish={this.onFinish}>
+                <Form name="normal_login" size="large" className="login-form" onFinish={this.onFinish} onValuesChange={this.formInputChange}>
                     <Row justify="center">
                         <Col span={16}>
-                            <Form.Item name="username" rules={[{required: true, message: '请输入账户!'}]}>
-                                <Input prefix={<UserOutlined className="site-form-item-icon"/>} placeholder="请输入账户"/>
+                            <Form.Item name="username" rules={[{required: true, message: '请输入账户!'},{type:'email', message: '请输入正确邮箱!'},]}>
+                                <Input allowClear ref={this.textInput} prefix={<UserOutlined className="site-form-item-icon"/>} placeholder="请输入账户"/>
                             </Form.Item>
                         </Col>
                     </Row>
                     <Row justify="center">
                         <Col span={16}>
                             <Form.Item name="password" rules={[{required: true, message: '请输入密码!'}]}>
-                                <Input prefix={<LockOutlined className="site-form-item-icon"/>} type="password" placeholder="请输入密码"/>
+                                <Input allowClear prefix={<LockOutlined className="site-form-item-icon"/>} iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)} type="password" placeholder="请输入密码"/>
                             </Form.Item>
                         </Col>
                     </Row>
                     <Row justify="center">
                         <Col span={16}>
-                            <Form.Item name="password2" rules={[{required: true, message: '请输入密码!'}]}>
-                                <Input prefix={<LockOutlined className="site-form-item-icon"/>} type="password" placeholder="请再次输入密码"/>
+                            <Form.Item name="password2" dependencies={['password']} rules={[
+                                    {required: true, message: '请输入密码!'},
+                                    ({ getFieldValue }) => ({
+                                        validator(rule, value) {
+                                            if (!value || getFieldValue('password') === value) {
+                                                return Promise.resolve();
+                                            }
+                                            return Promise.reject('您输入的密码不匹配!');
+                                        },
+                                    }),
+                                ]}>
+                                <Input allowClear prefix={<LockOutlined className="site-form-item-icon"/>} type="password" placeholder="请再次输入密码"/>
                             </Form.Item>
                         </Col>
                     </Row>
                     <Row justify="center">
                         <Col span={16}>
                             <Row gutter={13}>
-                                <Col span={16}>
-                                    <Form.Item name="code" rules={[{required: true, message: '请输入验证码!'}]}>
-                                        <Input prefix={<MobileOutlined className="site-form-item-icon"/>} placeholder="请输入验证码"/>
+                                <Col span={15}>
+                                    <Form.Item name="code" rules={[{required: true, message: '请输入验证码!'},{type: 'string', len:6, message: '请输入六位验证码!'}]}>
+                                        <Input allowClear maxLength={6} prefix={<MobileOutlined className="site-form-item-icon"/>} placeholder="请输入验证码"/>
                                     </Form.Item>
                                 </Col>
-                                <Col span={8}>
-                                    <Button type="primary" className="login-form-button">获取验证码</Button>
+                                <Col span={9}>
+                                    <Code userName={this.state.userName} userNameFocus={this.textInput}/>
+                                    {/*<Button type="primary" className="login-form-button">获取验证码</Button>*/}
                                 </Col>
                             </Row>
                         </Col>

@@ -22,10 +22,10 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
       let res = response.data;
-      if (res.resCode !== 200) {
+      if (res.resCode !== 0) {
           return message.warning(res.message)
       }
-      console.log('111')
+      console.log(res,'111')
       return res;
   },
   error => {
