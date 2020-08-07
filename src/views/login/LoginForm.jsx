@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {Button, Checkbox, Col, Form, Input, Row} from "antd";
+import {Button, Checkbox, Col, Form, Input, Row, message} from "antd";
 import {UserOutlined, LockOutlined, MobileOutlined } from '@ant-design/icons';
 import { login } from '../../apis/user';
 import Code from '../../components/code/index'
+import Crypto from "crypto-js";
 
 export default class LoginForm extends Component {
     constructor(props) {
@@ -15,10 +16,24 @@ export default class LoginForm extends Component {
     }
 
     onFinish = values => {
-        login().then(res=>{
-            console.log(res.data)
-        });
         console.log('Received values of form: ', values);
+        let param = {
+            username:values.username,
+            password:Crypto.MD5(values.password).toString(),
+            code:values.code,
+        };
+        login(param).then(res=>{
+            console.log(res.data)
+            if(res.resCode === 0){
+                message.success('登录成功!')
+            }
+        });
+    };
+
+    onFinishFailed = ({values, errorFields, outOfDate })=> {
+        if(!outOfDate){
+            return message.error('请检查您输入的内容!')
+        }
     };
 
     formInputChange = (changedValues, allValues) => {
@@ -46,12 +61,11 @@ export default class LoginForm extends Component {
                         </Row>
                     </Col>
                 </Row>
-                <Form name="normal_login" size="large" className="login-form" onFinish={this.onFinish} onValuesChange={this.formInputChange}>
+                <Form name="normal_login" size="large" className="login-form" onFinish={this.onFinish} initialValues={{ remember: false }} onFinishFailed={this.onFinishFailed} onValuesChange={this.formInputChange}>
                     <Row justify="center">
                         <Col span={16}>
                             <Form.Item name="username" rules={[
-                                    {required: true, message: '请输入邮箱!'},
-                                    {type:'email', message: '请输入正确邮箱!'},
+                                    {required: true, message: '请输入账户!'},{type:'email', message: '请输入正确邮箱!'}
                                     // ({ getFieldValue }) => ({
                                     //     validator(rule, value) {
                                     //         const reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$"); //正则表达式
@@ -86,7 +100,7 @@ export default class LoginForm extends Component {
                                 </Col>
                                 <Col span={9}>
                                     {/*<Button type="primary" loading={ this.state.code_btn_loading } onClick={this.getCode} block className="login-form-button getCode">{ this.state.code_btn_text }</Button>*/}
-                                    <Code userName={this.state.userName} userNameFocus={this.textInput}/>
+                                    <Code userName={this.state.userName} userNameFocus={this.textInput} useModule={'login'}/>
                                 </Col>
                             </Row>
                         </Col>

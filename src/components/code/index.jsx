@@ -8,6 +8,7 @@ export default class Code extends Component {
         this.state = {
             timer:null,
             userName:props.userName,
+            useModule:props.useModule,
             btn_loading:false,
             btn_text:'获取验证码'
         }
@@ -42,11 +43,12 @@ export default class Code extends Component {
             });
             const params = {
                 username:this.state.userName,
-                module:'login'
+                module:this.state.useModule //登录：login，注册：register
             };
             getCode(params).then(res=>{
                 if(res.resCode === 0){
-                    this.countDown()
+                    this.countDown();
+                    return message.success(res.message, 10)
                 }
             }).catch(error=>{
                 this.setState({

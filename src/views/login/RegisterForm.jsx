@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
-import {Button, Col, Form, Input, Row} from "antd";
+import {Button, Col, Form, Input, message, Row} from "antd";
 import {UserOutlined, LockOutlined, MobileOutlined, EyeTwoTone, EyeInvisibleOutlined} from '@ant-design/icons';
-import Code from '../../components/code/index'
+import Code from '../../components/code/index';
+import Crypto from 'crypto-js'
+
+import { register } from '../../apis/user';
 
 export default class RegisterForm extends Component {
     constructor(props) {
@@ -21,6 +24,23 @@ export default class RegisterForm extends Component {
 
     onFinish = values => {
         console.log('Received values of form: ', values);
+        let param = {
+            username:values.username,
+            password:Crypto.MD5(values.password).toString(),
+            code:values.code,
+        };
+        register(param).then(res=>{
+            if(res.resCode === 0){
+                message.success(res.message, 10)
+                this.gotoFrom()
+            }
+        });
+    };
+
+    onFinishFailed = ({values, errorFields, outOfDate })=> {
+        if(!outOfDate){
+            return message.error('请检查您输入的内容!')
+        }
     };
 
     gotoFrom = () => {
@@ -42,7 +62,7 @@ export default class RegisterForm extends Component {
                         </Row>
                     </Col>
                 </Row>
-                <Form name="normal_login" size="large" className="login-form" onFinish={this.onFinish} onValuesChange={this.formInputChange}>
+                <Form name="normal_login" size="large" className="login-form" onFinish={this.onFinish} onFinishFailed={this.onFinishFailed} onValuesChange={this.formInputChange}>
                     <Row justify="center">
                         <Col span={16}>
                             <Form.Item name="username" rules={[{required: true, message: '请输入账户!'},{type:'email', message: '请输入正确邮箱!'},]}>
@@ -53,7 +73,8 @@ export default class RegisterForm extends Component {
                     <Row justify="center">
                         <Col span={16}>
                             <Form.Item name="password" rules={[{required: true, message: '请输入密码!'}]}>
-                                <Input allowClear prefix={<LockOutlined className="site-form-item-icon"/>} iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)} type="password" placeholder="请输入密码"/>
+                                {/*<Input allowClear prefix={<LockOutlined className="site-form-item-icon"/>} iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)} type="password" placeholder="请输入密码"/>*/}
+                                <Input.Password prefix={<LockOutlined className="site-form-item-icon"/>} placeholder="请输入密码" iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}/>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -70,7 +91,8 @@ export default class RegisterForm extends Component {
                                         },
                                     }),
                                 ]}>
-                                <Input allowClear prefix={<LockOutlined className="site-form-item-icon"/>} type="password" placeholder="请再次输入密码"/>
+                                {/*<Input allowClear prefix={<LockOutlined className="site-form-item-icon"/>} type="password" placeholder="请再次输入密码"/>*/}
+                                <Input.Password prefix={<LockOutlined className="site-form-item-icon"/>} placeholder="请再次输入密码" iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}/>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -83,7 +105,7 @@ export default class RegisterForm extends Component {
                                     </Form.Item>
                                 </Col>
                                 <Col span={9}>
-                                    <Code userName={this.state.userName} userNameFocus={this.textInput}/>
+                                    <Code userName={this.state.userName} userNameFocus={this.textInput} useModule={'register'}/>
                                     {/*<Button type="primary" className="login-form-button">获取验证码</Button>*/}
                                 </Col>
                             </Row>

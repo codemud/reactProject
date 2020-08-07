@@ -9,6 +9,15 @@ export function login (data) {
     })
 }
 
+// 注册
+export function register (data) {
+    return service({
+        url: '/register/',
+        method: 'post',
+        data: data
+    })
+}
+
 // 获取验证码
 export function getCode (data) {
     return service({
