@@ -39,6 +39,9 @@ service.interceptors.response.use(
               case 404:
                   msg = "服务器无法找到所请求的页面!";
                   break;
+              default:
+                  msg = "服务器出小差了!";
+                  break;
           }
       }
       message.warning(msg);

@@ -2,8 +2,10 @@ import React, {Component} from 'react';
 import {Button, Checkbox, Col, Form, Input, Row, message} from "antd";
 import {UserOutlined, LockOutlined, MobileOutlined } from '@ant-design/icons';
 import { login } from '../../apis/user';
-import Code from '../../components/code/index'
+import Code from '../../components/code'
 import Crypto from "crypto-js";
+import verify from "../../utils/verify";
+import models from '../../utils/models'
 
 export default class LoginForm extends Component {
     constructor(props) {
@@ -23,9 +25,12 @@ export default class LoginForm extends Component {
             code:values.code,
         };
         login(param).then(res=>{
-            console.log(res.data)
             if(res.resCode === 0){
-                message.success('登录成功!')
+                message.success('登录成功!');
+                verify.token.set(res.data.token);
+                models.conf.set(res.data,function() {
+                    window.location.href = '/'
+                });
             }
         });
     };

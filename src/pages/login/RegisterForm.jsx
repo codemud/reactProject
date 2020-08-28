@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Col, Form, Input, message, Row} from "antd";
 import {UserOutlined, LockOutlined, MobileOutlined, EyeTwoTone, EyeInvisibleOutlined} from '@ant-design/icons';
-import Code from '../../components/code/index';
+import Code from '../../components/code';
 import Crypto from 'crypto-js'
 
 import { register } from '../../apis/user';
@@ -31,7 +31,7 @@ export default class RegisterForm extends Component {
         };
         register(param).then(res=>{
             if(res.resCode === 0){
-                message.success(res.message, 10)
+                message.success(res.message||'注册成功,请登录！', 10);
                 this.gotoFrom()
             }
         });

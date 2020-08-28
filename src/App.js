@@ -1,7 +1,5 @@
 import React from 'react';
-import { HashRouter, Switch, Route} from 'react-router-dom';
-
-import Index from "./views/login";
+import Router from './routers';
 
 export default class App extends React.Component {
     // eslint-disable-next-line no-useless-constructor
@@ -11,11 +9,7 @@ export default class App extends React.Component {
 
     render() {
         return (
-            <HashRouter>
-                <Switch>
-                    <Route component={ Index } path="/"/>
-                </Switch>
-            </HashRouter>
+            <Router />
         )
     }
 }
