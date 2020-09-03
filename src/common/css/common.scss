@@ -1,0 +1,85 @@
+.ant-layout {
+  height: 100vh;
+}
+.WTable {
+  margin-top: 2%;
+}
+.ant-layout::-webkit-scrollbar-track-piece { //滚动条凹槽的颜色，还可以设置边框属性
+  background-color:#ffffff;
+}
+.ant-layout::-webkit-scrollbar {//滚动条的宽度
+  width:8px;
+  height:8px;
+}
+.ant-layout::-webkit-scrollbar-thumb {//滚动条的设置
+  background-clip:padding-box;
+  min-height:28px;
+  border-radius: 10px;
+  background: #ccc;
+}
+.ant-layout::-webkit-scrollbar-thumb:hover {
+  background-color:#bbb;
+}
+
+.ant-table-body::-webkit-scrollbar-track-piece { //滚动条凹槽的颜色，还可以设置边框属性
+  background-color:#ffffff;
+}
+.ant-table-body::-webkit-scrollbar {//滚动条的宽度
+  width:8px;
+  height:8px;
+}
+.ant-table-body::-webkit-scrollbar-thumb {//滚动条的设置
+  background-clip:padding-box;
+  min-height:28px;
+  border-radius: 10px;
+  background: #ccc;
+}
+.ant-table-body::-webkit-scrollbar-thumb:hover {
+  background-color:#bbb;
+}
+
+.ant-modal-body {
+  height: 100%;
+  overflow-y: scroll;
+}
+.ant-modal-body::-webkit-scrollbar-track-piece { //滚动条凹槽的颜色，还可以设置边框属性
+  background-color:#ffffff;
+}
+.ant-modal-body::-webkit-scrollbar {//滚动条的宽度
+  width:8px;
+  height:8px;
+}
+.ant-modal-body::-webkit-scrollbar-thumb {//滚动条的设置
+  background-clip:padding-box;
+  min-height:28px;
+  border-radius: 10px;
+  background: #ccc;
+}
+.ant-modal-body::-webkit-scrollbar-thumb:hover {
+  background-color:#bbb;
+}
+
+//layout
+.ant-layout .trigger {
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 24px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.ant-layout .trigger:hover {
+  color: #1890ff;
+}
+
+.ant-layout .logo {
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px;
+}
+
+.site-layout .site-layout-background {
+  background: #fff;
+}
+
+

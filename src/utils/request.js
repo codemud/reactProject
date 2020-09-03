@@ -25,7 +25,6 @@ service.interceptors.response.use(
       if (res.resCode !== 0) {
           return message.warning(res.message)
       }
-      console.log(res,'111')
       return res;
   },
   error => {

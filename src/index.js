@@ -1,12 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Router from './routers';
+import Router from './routers/index';
 import * as serviceWorker from './serviceWorker';
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import './common/css/reset.css';
+import './common/css/common.scss';
 
-ReactDOM.render(<Router />, document.getElementById('root'));
+ReactDOM.render(
+    <Router />,
+    document.getElementById('root')
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

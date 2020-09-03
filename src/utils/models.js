@@ -9,10 +9,12 @@ const models = {
      * @returns {boolean}
      */
     Init({ component: Component, ...rest }) {
+
         // 检查登录
         if (rest.path === '/login') {
             return true
         }
+        console.log('111')
         return !!verify.token.get();
     },
 

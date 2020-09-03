@@ -1,11 +1,36 @@
 import React from 'react'
-import Home from "../../pages/home";
-import Login from '../../pages/login';
-import NotFound from "../../pages/NotFound";
-import sysModule from '../moudels/sys'
-import Layouts from '../../components/Layout'
+import {Redirect, Route} from 'react-router-dom'
+import Login from '../../pages/login/index';
+import Layouts from "../../components/Layouts";
+import functions from "../../utils/functions.js"
+import models from "../../utils/models";
 
-export default [
+const PrivateRoute = ({ component: Component, ...rest }) => (
+    <Route
+        {...rest}
+        render={
+            props => models.Init({ component: Component, ...rest })
+                ? <Component {...props} />
+                : <Redirect to={{
+                    pathname: '/login',
+                    state: {
+                        from: props.location
+                    }
+                }} />
+        }
+    />
+);
+
+const render = function() {
+    return <Layouts routes={
+        functions.modules(
+            require.context('../moudels', true)
+        ).map(
+            (item, key) => <PrivateRoute exact key={ key } { ...item } />
+        )
+    } />
+};
+const routerList = [
     {
         name: 'login',
         path: '/login',
@@ -15,17 +40,7 @@ export default [
     {
         name: 'home',
         path: '/',
-        exact: true,
-        component: Home,
-        render(props){
-            return <Layouts {...props}/>
-        }
-    },
-    ...sysModule,
-    {
-        name: '404',
-        path: '*',
-        exact: true,
-        component: NotFound
-    },
-]
+        render
+    }
+];
+export {routerList}
