@@ -4,6 +4,7 @@ import Login from '../../pages/login/index';
 import Layouts from "../../components/Layouts";
 import functions from "../../utils/functions.js"
 import models from "../../utils/models";
+import NotFound from "../../pages/NotFound";
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route
@@ -22,10 +23,18 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 );
 
 const render = function() {
+    let moduleRoute = functions.modules(
+        require.context('../moudels', true)
+    );
+    //必须在所有路由列表的最后
+    moduleRoute.push({
+        name: '404',
+        path: '*',
+        exact: true,
+        component: NotFound
+    });
     return <Layouts routes={
-        functions.modules(
-            require.context('../moudels', true)
-        ).map(
+        moduleRoute.map(
             (item, key) => <PrivateRoute exact key={ key } { ...item } />
         )
     } />

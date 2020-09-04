@@ -1,20 +1,47 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {Layout,Menu } from "antd";
-import {UserOutlined, VideoCameraOutlined, UploadOutlined,} from '@ant-design/icons';
+import { Link } from "react-router-dom"
+import {menuList} from '../../routers/menuRouter'
+
 function Menus(props) {
+    const [openKeys,optionsSet] = useState([]);
+    const tile = list => list.map(
+        item =>
+            item.sub && item.sub.length
+            ? <Menu.SubMenu key={ item.key } icon={ item.icon } title={ item.name }>
+                    {tile(item.sub)}
+            </Menu.SubMenu>
+            : <Menu.Item key={ item.key } icon={ item.icon }>
+                    <Link to={ `/${item.route}` }>{ item.name }</Link>
+            </Menu.Item>
+    );
+    // 设置选中
+    const setActive = (item) => {
+        optionsSet(item.keyPath)
+    };
+    const onOpenChange = openKeys => {
+        if(openKeys.length === 1 || openKeys.length === 0){
+            optionsSet(openKeys);
+            return false;
+        }
+        const latestOpenKey = openKeys[openKeys.length - 1];
+        if(latestOpenKey.includes(openKeys[0])){
+            optionsSet(openKeys)
+        }else {
+            optionsSet(latestOpenKey ? [latestOpenKey] : [])
+        }
+    };
     return (
         <Layout.Sider trigger={null} width={256} collapsible collapsed={props.collapsed}>
             <div className="logo" />
-            <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-                <Menu.Item key="1" icon={<UserOutlined />}>
-                    nav 1
-                </Menu.Item>
-                <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-                    nav 2
-                </Menu.Item>
-                <Menu.Item key="3" icon={<UploadOutlined />}>
-                    nav 3
-                </Menu.Item>
+            <Menu
+                theme="dark"
+                mode="inline"
+                onClick={ setActive }
+                openKeys={openKeys}
+                onOpenChange={ onOpenChange }
+            >
+                {tile(menuList)}
             </Menu>
         </Layout.Sider>
     )
