@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { message } from 'antd';
+import verify from "./verify";
+import models from "./models";
 
 const service = axios.create({
     baseURL: process.env.REACT_APP_BASE_URL,
@@ -10,7 +12,8 @@ const service = axios.create({
 //请求拦截器
 service.interceptors.request.use(
   config => {
-    // config.headers.Authorization = getToken() ? "Bearer " + getToken() : "";
+    config.headers.Token = verify.token.get() ? verify.token.get() : "";
+    config.headers.Username = models.userinfo.get() ? models.userinfo.get() : "";
     return config
   },
   error => {

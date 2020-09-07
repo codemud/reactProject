@@ -31,7 +31,6 @@ const verify = {
     clearStore() {
         store.clear()
     },
-
     /**
      * token
      */

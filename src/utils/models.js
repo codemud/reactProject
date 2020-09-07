@@ -99,13 +99,11 @@ const models = {
      */
     userinfo: {
         key: 'user-info',
-
-        /**
-         * 获取
-         * @returns {*}
-         */
+        set(results) {
+            store.set(this.key, results)
+        },
         get() {
-            return store.get(this.key) || {}
+            return store.get(this.key,true) || ''
         }
     },
 
@@ -128,7 +126,7 @@ const models = {
          * 设置配置
          */
         set(data,callback) {
-            store.set(models.userinfo.key, data.username);
+            models.userinfo.set(data.username);
             'function' === typeof callback && callback()
         },
     }

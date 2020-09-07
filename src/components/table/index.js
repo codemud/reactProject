@@ -1,6 +1,5 @@
 import React from 'react';
 import { Table, Card } from 'antd';
-import '../../assets/scss/admins/compontsStyle.scss'
 function TableComponent (props) {
     const { columns, data, loadData, children, rowkey } = props;
     const pagination = {
