@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { Button,Switch,message,Form } from 'antd'
-import { departmentList,setDeptState,addDept } from '../../../apis/deptList'
+import { departmentList,setDeptState,addDept,delDept } from '../../../apis/deptList'
 import AdvancedSearchForm from "../../../components/form";
 import TableComponent from '../../../components/table'
 import ModalComponent from '../../../components/modal'
@@ -16,6 +16,8 @@ function FormIndex() {
         loading:false
     });
     const [visible,setVisible] = useState(false);
+    const [delVisible,setDelVisible] = useState(false);
+    const [delIds,setDelIds] = useState('');
     const [ addForm ] = Form.useForm();
 
     const fromSearchData = [
@@ -38,8 +40,10 @@ function FormIndex() {
     const openDetailModal = ()=>{
 
     };
-    const openDeleteModal = ()=>{
-
+    const openDeleteModal = (value)=>{
+        let arr = value.id;
+        setDelIds(arr);
+        setDelVisible(true)
     };
     const addModalProps = {
         visible:visible,
@@ -47,8 +51,8 @@ function FormIndex() {
             title:'新增',
             okText:'保存',
             cancelText:'取消',
-            width:800,
-            bodyStyle:{height:600}
+            width:700,
+            bodyStyle:{height:400}
         },
         children: <AddForm form={addForm} data={{}}/>,
         onCreate:()=>{
@@ -57,6 +61,7 @@ function FormIndex() {
                 addDept(values).then((res)=>{
                     if(res.resCode === 0){
                         message.success('新增成功！');
+                        addForm.resetFields();
                         setVisible(false);
                         setFormData(Object.assign({},formData));
                     }
@@ -69,6 +74,37 @@ function FormIndex() {
                 });
         },
         onCancel:()=>{addForm.resetFields();setVisible(false);}
+    };
+    const delModalProps = {
+        visible:delVisible,
+        modalOptions : {
+            title:'删除',
+            okText:'确定',
+            cancelText:'取消',
+            width:400,
+            bodyStyle:{height:100}
+        },
+        children: <p>是否确定删除?</p>,
+        onCreate:()=>{
+            addForm.validateFields().then(values => {
+                // addForm.resetFields();
+                delDept({id:delIds}).then((res)=>{
+                    if(res.resCode === 0){
+                        message.success('删除成功！');
+                        setFormData(Object.assign({},formData));
+                    }else {
+                        message.success("删除失败!")
+                    }
+                    setDelVisible(false)
+                }).catch((err)=>{
+                    console.log(err)
+                });
+            })
+                .catch(info => {
+                    console.log('Validate Failed:', info);
+                });
+        },
+        onCancel:()=>{setDelVisible(false);}
     };
     const tableTopBtn = ()=>{
         return <div style={{ marginBottom: 16 }}>
@@ -112,6 +148,7 @@ function FormIndex() {
             <AdvancedSearchForm fromData={fromSearchData} onFinishData={formFinish}/>
             <TableComponent columns={columns} data={listData['list']} loadData={listData['loading']} children={tableTopBtn()} rowkey="id"/>
             <ModalComponent {...addModalProps}/>
+            <ModalComponent {...delModalProps}/>
         </div>
     )
 }

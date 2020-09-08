@@ -24,7 +24,7 @@ export function addDept (data) {
         data: data
     })
 }
-// add
+// del
 export function delDept (data) {
     return service({
         url: '/department/delete/',
