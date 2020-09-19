@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { Button,Switch,message,Form } from 'antd'
-import { departmentList,setDeptState,addDept,delDept } from '../../../apis/deptList'
+import { departmentList,setDeptState,addDept,delDept,updateDept } from '../../../apis/deptList'
 import AdvancedSearchForm from "../../../components/form";
 import TableComponent from '../../../components/table'
 import ModalComponent from '../../../components/modal'
@@ -17,7 +17,9 @@ function FormIndex() {
     });
     const [visible,setVisible] = useState(false);
     const [delVisible,setDelVisible] = useState(false);
+    const [detailVisible,setDetailVisible] = useState(false);
     const [delIds,setDelIds] = useState('');
+    const [tableIndexData,setTableIndexData] = useState({});
     const [ addForm ] = Form.useForm();
 
     const fromSearchData = [
@@ -37,8 +39,11 @@ function FormIndex() {
             }
         })
     },[formData]);
-    const openDetailModal = ()=>{
-
+    const openDetailModal = (value)=>{
+        let obj = Object.assign({},value);
+        obj.status = obj.status === '0';
+        setTableIndexData(obj);
+        setDetailVisible(true)
     };
     const openDeleteModal = (value)=>{
         let arr = value.id;
@@ -54,7 +59,7 @@ function FormIndex() {
             width:700,
             bodyStyle:{height:400}
         },
-        children: <AddForm form={addForm} data={{}}/>,
+        children: <AddForm form={addForm} data={tableIndexData}/>,
         onCreate:()=>{
             addForm.validateFields().then(values => {
                 // addForm.resetFields();
@@ -106,6 +111,37 @@ function FormIndex() {
         },
         onCancel:()=>{setDelVisible(false);}
     };
+    const detailsModalProps = {
+        visible:detailVisible,
+        modalOptions : {
+            title:'编辑',
+            okText:'保存',
+            cancelText:'取消',
+            width:700,
+            bodyStyle:{height:400}
+        },
+        children: <AddForm form={addForm} data={tableIndexData}/>,
+        onCreate:()=>{
+            addForm.validateFields().then(values => {
+                // detailForm.resetFields();
+                values.id = tableIndexData.id;
+                updateDept(values).then((res)=>{
+                    if(res.resCode === 0){
+                        message.success('修改成功！');
+                        addForm.resetFields();
+                        setDetailVisible(false);
+                        setFormData(Object.assign({},formData));
+                    }
+                }).catch((err)=>{
+                    console.log(err)
+                });
+            })
+                .catch(info => {
+                    console.log('Validate Failed:', info);
+                });
+        },
+        onCancel:()=>{addForm.resetFields();setDetailVisible(false)}
+    };
     const tableTopBtn = ()=>{
         return <div style={{ marginBottom: 16 }}>
             <Button type="primary" onClick={()=>{setVisible(true)}}>新增</Button>
@@ -116,7 +152,7 @@ function FormIndex() {
             title: '功能列', key: 'id', fixed: 'left', width: 150, align: 'center',
             render: (value) => (
                 <div>
-                    <Button type="primary" className="marginR_10" onClick={()=>openDetailModal(value)}>查看</Button>
+                    <Button type="primary" className="marginR_10" onClick={()=>openDetailModal(value)}>编辑</Button>
                     <Button type="text" danger onClick={()=>openDeleteModal(value)}>删除</Button>
                 </div>
             ),
@@ -126,7 +162,7 @@ function FormIndex() {
         {
             title: '状态', dataIndex: 'status', align: 'center',
             render: (record,event) => {
-                return <Switch checked={event.status} onChange={(val) => {
+                return <Switch checked={event.status === '0'} onChange={(val) => {
                     listData.list.forEach(item => {
                         if(item.id === event.id){
                             item.state = !record
@@ -141,7 +177,6 @@ function FormIndex() {
                 }} />
             }
         },
-        {title: '介绍', dataIndex: 'content',align: 'center',}
     ];
     return (
         <div>
@@ -149,6 +184,7 @@ function FormIndex() {
             <TableComponent columns={columns} data={listData['list']} loadData={listData['loading']} children={tableTopBtn()} rowkey="id"/>
             <ModalComponent {...addModalProps}/>
             <ModalComponent {...delModalProps}/>
+            <ModalComponent {...detailsModalProps}/>
         </div>
     )
 }

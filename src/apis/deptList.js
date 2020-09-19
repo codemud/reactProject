@@ -32,4 +32,12 @@ export function delDept (data) {
         data: data
     })
 }
+// add
+export function updateDept (data) {
+    return service({
+        url: '/department/update/',
+        method: 'post',
+        data: data
+    })
+}
 

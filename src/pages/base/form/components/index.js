@@ -21,8 +21,8 @@ function AddForm (props) {
         //     }
         // },
         {span:'24',name:'number',type:'inputNumber',label:'人数',rules:[{required: true, message: '请输入人数!'}],placeholder:'请输入人数'},
-        {span:'24',name:'status',type:'switch',label:'状态',checkedChildren:'启用',unCheckedChildren:'禁用',defaultChecked:true},
-        {span:'24',name:'content',type:'textarea',label:'介绍',maxLength:100,rules:[{required: true, message: '请输入介绍!'},{type:'string',max:100,message: '长度不能超过100个字!'}],placeholder:'请输入动态简介'},
+        {span:'24',name:'status',type:'switch',label:'状态',checkedChildren:'启用',unCheckedChildren:'禁用',defaultChecked:true,valuePropName:'checked'},
+        {span:'24',name:'content',type:'textarea',label:'介绍',maxLength:100,rules:[{type:'string',max:100,message: '长度不能超过100个字!'}],placeholder:'请输入动态简介'},
     ];
     const outPut = (param) => {
         switch (param.type) {
@@ -53,6 +53,7 @@ function AddForm (props) {
                         label={item.label}
                         rules={item.rules}
                         labelCol={{span:3}}
+                        valuePropName={item.valuePropName}
                     >
                         {outPut(item)}
                     </Form.Item>
